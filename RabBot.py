@@ -21,15 +21,15 @@ from animalfact import get_panda
 
 
 import os
-import io
+import io   
 import warnings
-#from PIL import Image
-#from stability_sdk import client
-#import stability_sdk.interfaces.gooseai.generation.generation_pb2 as generation
+""" from PIL import Image
+from stability_sdk import client
+import stability_sdk.interfaces.gooseai.generation.generation_pb2 as generation """
 
 current_date = date.today()
 
-Toggle = "False"
+Toggle = "True"
 
 #code for using Wordnik api from https://www.twilio.com/blog/word-of-the-day-sms-python-twilio
 def get_word_of_the_day(current_date):
@@ -65,12 +65,17 @@ intents.message_content = True
 
 client = discord.Client(intents=intents)
 
+
 @client.event
 async def on_ready():
     print(f'We have logged in as {client.user}')
 
 @client.event
 async def on_message(message):
+    
+    x = randint(1, 500)
+    y = randint(1, 200)
+
     if message.author == client.user:
         return
 
@@ -79,9 +84,7 @@ async def on_message(message):
 
     if message.content.startswith(""):
         print(message.author, ":", message.content)
-        x = randint(1, 500)
         print("x is ", x)
-        y = randint(1, 200)
         print("y is ", y)
 
 #Randomly responds and reacts to messages
@@ -111,7 +114,7 @@ async def on_message(message):
     current_date = date.today()
     words = (get_word_of_the_day(current_date))
     wordsCap = words['word'].capitalize()
-    if message.content.startswith("Rwotd") or message.content.startswith("rwotd"):
+    if message.content.__contains__("Rwotd") or message.content.__contains__("rwotd"):
         await message.channel.send("**Today's Word: **"+wordsCap+" \n**Category: **"+words['partOfSpeech'].capitalize()+"\n**Definition: **"+words['definition']+"\n**Note: **"+words['note'])
 
 
@@ -127,50 +130,53 @@ async def on_message(message):
 
 
 
-    # STABILITY_HOST = 'grpc.stability.ai:443'
+    STABILITY_HOST = 'grpc.stability.ai:443'
 
-    # if message.content.startswith("Rdraw") or message.content.startswith("rdraw"):
-    #     rprompt = (message.content + " add a rabbit").replace("rdraw", "")
-    #     #await event.message.respond("I can't do that at the moment; I'm sorry")
-    #     chance = randint(1, 2)
-    #     if chance == 1:
-    #         await message.reply("One moment, please :)")
-    #     elif chance == 2:
-    #         await message.reply("Coming right up!")
-    #     print(rprompt)
+    if message.content.startswith("Rdraw") or message.content.startswith("rdraw"):
+        rprompt = (message.content + " add a rabbit").replace("rdraw", "")
+        #await event.message.respond("I can't do that at the moment; I'm sorry")
+        chance = randint(1, 2)
+        if chance == 1:
+            await message.reply("One moment, please :)")
+        elif chance == 2:
+            await message.reply("Coming right up!")
+        print(rprompt)
+
+    
+        
 
 
 #################################################################################
 
             # Set up our connection to the API.
-        # response = requests.post(
-        # f"https://api.stability.ai/v2beta/stable-image/generate/core",
-        # headers={
-        #     "authorization": STABILITY_KEY,
-        #     "accept": "image/*"
-        # },
-        # files={"none": ''},
-        # data={
-        #     "prompt": rprompt,
-        #     "output_format": "png",
-        # },
-        # )
+        response = requests.post(
+        f"https://api.stability.ai/v2beta/stable-image/generate/core",
+        headers={
+            "authorization": STABILITY_KEY,
+            "accept": "image/*"
+        },
+        files={"none": ''},
+        data={
+            "prompt": rprompt,
+            "output_format": "png",
+        },
+        )
 
-        # if response.status_code == 200:
-        #     with open("./images/" + rprompt + ".png", 'wb') as file:
-        #         file.write(response.content)
-        #     await message.send(file = response.content)
-        # else:
-        #     await message.reply("Oops all out of tokens")
-        #     raise Exception(str(response.json()))
+        if response.status_code == 200:
+            with open("./images/" + rprompt + ".png", 'wb') as file:
+                file.write(response.content)
+            await message.send(file = response.content)
+        else:
+            await message.reply("Oops all out of tokens")
+            raise Exception(str(response.json()))
             
 
 #################################################################
 
     # print all commands
 
-    if message.content.startswith("Rcommands") or message.content.startswith("rcommands"):
-        await message.reply("The commands are: 'Rcommands', 'Rcoinflip', 'Rdraw', and 'Rwotd'. For Rdraw, tell me something you would like for me to draw")
+    if message.content.__contains__("Rcommands") or message.content.__contains__("rcommands"):
+        await message.reply("The commands are: 'Rcommands', 'Rcoinflip', 'R8ball' or 'R8', and 'Rwotd'")
     
 
     # Loss and freedom haha
@@ -203,8 +209,40 @@ async def on_message(message):
         elif message.content.__contains__("<@1002374211215577160>") and x==7:
             await message.reply(("L + ratio + fell off"))
 
+
+
+    if message.content.startswith("owo") or message.content.startswith("Owo"):
+            await message.add_reaction("👎")
+
+    raidez = randint(1, 100)
+    if raidez == 2:
+        if message.author.id == 514109465675694091:
+            await message.add_reaction("👎")
+ 
+    if message.author.id == 408785106942164992:
+        await message.add_reaction("👎")
+
+    ball = randint(1, 9)    
+    if message.content.__contains__("R8ball") or message.content.__contains__("r8ball") or message.content.__contains__("r8") or message.content.__contains__("R8"):
+        if ball == 1:
+            await message.reply("Yes.")
+        if ball == 2:
+            await message.reply("For sure!")
+        if ball == 3:
+            await message.reply("No.")
+        if ball == 4:
+            await message.reply("One word. Absolutely not!")
+        if ball == 5:
+            await message.reply("Maybe?")
+        if ball == 6:
+            await message.reply("Absolutely!")
+        if ball == 7:
+            await message.reply("Wtf?")
+        if ball == 8:
+            await message.reply("I'll have to think about that. Please ask again later.")
+        if ball == 9:
+            await message.reply("Huh? Sorry, I wasn't listening.")
+
 @client.event
 async def message_print(message):
     print(message.author)
-
-client.run(Hikari_Key)
